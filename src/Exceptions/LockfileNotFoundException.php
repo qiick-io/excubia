@@ -13,6 +13,6 @@ final class LockfileNotFoundException extends RuntimeException
 {
     public function __construct(string $projectRoot)
     {
-        parent::__construct('composer.lock was not found in '.$projectRoot.'.');
+        parent::__construct('composer.lock was not found in '.$projectRoot.'.', 2);
     }
 }

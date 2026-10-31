@@ -66,16 +66,32 @@ it('leaves the laravel version empty for a non-laravel project', function () {
         ->and($snapshot->composerPackages[0]->name)->toBe('symfony/console');
 });
 
-it('rejects a broken lockfile', function () {
-    expect(fn () => (new ProjectSnapshotService)->snapshot(projectFixture('broken-lockfile'), ExcubiaConfigurationData::defaults()))
-        ->toThrow(InvalidConfigurationException::class);
+it('rejects a broken lockfile with exit code 2', function () {
+    $caught = null;
+
+    try {
+        (new ProjectSnapshotService)->snapshot(projectFixture('broken-lockfile'), ExcubiaConfigurationData::defaults());
+    } catch (InvalidConfigurationException $exception) {
+        $caught = $exception;
+    }
+
+    expect($caught)->toBeInstanceOf(InvalidConfigurationException::class)
+        ->and($caught?->getCode())->toBe(2)
+        ->and($caught?->getMessage())->toContain('broken or unparseable');
 });
 
 it('requires composer.lock', function () {
     $root = temporaryProject([]);
+    $caught = null;
 
-    expect(fn () => (new ProjectSnapshotService)->snapshot($root, ExcubiaConfigurationData::defaults()))
-        ->toThrow(LockfileNotFoundException::class);
+    try {
+        (new ProjectSnapshotService)->snapshot($root, ExcubiaConfigurationData::defaults());
+    } catch (LockfileNotFoundException $exception) {
+        $caught = $exception;
+    }
+
+    expect($caught)->toBeInstanceOf(LockfileNotFoundException::class)
+        ->and($caught?->getCode())->toBe(2);
 });
 
 it('omits composer dev packages when includeDev is false', function () {
