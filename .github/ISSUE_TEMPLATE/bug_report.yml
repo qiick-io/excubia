@@ -1,0 +1,67 @@
+name: Report a bug
+description: Create a report to help us improve qiick Excubia
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+        Before filing, please check:
+        - You're on a recent version of qiick Excubia (`qiick/excubia-core`)
+        - There's [no existing issue](https://github.com/qiick-io/excubia-core/issues?q=is%3Aissue) that already describes the problem
+
+  - type: textarea
+    id: describe
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: What went wrong?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: To Reproduce
+      description: Steps to reproduce the behavior. Include the command (`vendor/bin/excubia` or `php artisan excubia:check`), flags, and any relevant output if helpful.
+      placeholder: |
+        1. Run `vendor/bin/excubia check …`
+        2. See error / unexpected severity
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: CLI output
+      description: Paste relevant command output (redact secrets). Leave blank if not applicable.
+      render: shell
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Fill in what you know. Leave blank if not applicable.
+      placeholder: |
+        qiick/excubia-core version:
+        PHP version:
+        Laravel version (if any):
+        OS:
+        How installed (composer require --dev / path repo):
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else that might help (related PRs, stack traces, excubia.json snippets).
