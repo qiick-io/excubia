@@ -25,6 +25,10 @@ arch('contracts are interfaces')
     ->toBeInterfaces()
     ->toHaveSuffix('Contract');
 
+arch('renderers use the renderer suffix')
+    ->expect('Qiick\Excubia\Renderers')
+    ->toHaveSuffix('Renderer');
+
 arch('parsers use the parser suffix')
     ->expect('Qiick\Excubia\Parsers')
     ->toHaveSuffix('Parser');
@@ -40,6 +44,10 @@ arch('registries use the registry suffix')
 arch('exceptions use the exception suffix')
     ->expect('Qiick\Excubia\Exceptions')
     ->toHaveSuffix('Exception');
+
+arch('configuration loaders use the loader suffix')
+    ->expect('Qiick\Excubia\Configuration')
+    ->toHaveSuffix('Loader');
 
 it('restricts health check dependencies once checks exist', function () {
     $checkDirectory = dirname(__DIR__, 2).'/src/Checks';

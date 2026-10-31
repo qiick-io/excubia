@@ -1,0 +1,19 @@
+{
+    "packages": {
+        "swiftmailer/swiftmailer": [
+            {
+                "name": "swiftmailer/swiftmailer",
+                "version": "v6.3.0",
+                "time": "2021-10-18T15:26:12+00:00",
+                "abandoned": "symfony/mailer",
+                "source": {
+                    "url": "https://github.com/swiftmailer/swiftmailer.git",
+                    "type": "git"
+                },
+                "require": {
+                    "php": ">=7.2.5"
+                }
+            }
+        ]
+    }
+}

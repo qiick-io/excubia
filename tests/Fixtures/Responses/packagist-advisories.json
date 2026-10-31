@@ -1,0 +1,13 @@
+{
+    "advisories": {
+        "guzzlehttp/guzzle": [
+            {
+                "advisoryId": "PKSA-gcrk-3vtt-1r14",
+                "packageName": "guzzlehttp/guzzle",
+                "affectedVersions": ">=8.0.0,<8.0.1|<7.15.2",
+                "link": "https://github.com/advisories/GHSA-v5mv-p594-2x33",
+                "severity": "high"
+            }
+        ]
+    }
+}
