@@ -50,6 +50,17 @@ The spec names the following and assigns no version. Each issue says so and is a
 | #20 | Phase B: uptime, connectors, and runtime probe | Section 1 and section 2. Roadmap Step 4. Not part of this spec. Includes multi-region probes and `qiick/excubia-probe`. Domain verification belongs here, not in v0.2.0. |
 | #21 | yarn.lock and pnpm-lock.yaml support | Section 6. Non-goals for v0.1.0 only. No later version is assigned. |
 
+## Dependencies on v0.1.0
+
+SPEC section 9 puts the web scanner on the same core. D4 puts the AI summary after `upgrade-plan`. D6 puts SARIF after JSON and Markdown. Roadmap issue bodies name those dependencies by spec name. The v0.1.0 issue numbers below were filed after those bodies and are not copied into them. Matching issues (not edited here):
+
+| Roadmap | Spec dependency | v0.1.0 issue |
+| --- | --- | --- |
+| #7, #8, #9 | Core: report model, data-source clients, cache, checks | #22, #24, #25–#33 |
+| #10 | Report model, then table / JSON / Markdown renderers | #22, #34 |
+| #11 | Ships with SARIF (#10). Not the v0.1.0 CI workflow | #36 is that workflow, and is not this action |
+| #12 | `upgrade-plan` | #33 |
+
 ## Not in this roadmap
 
 - v0.1.0 implementation, including the Packagist `qiick` claim (D5) and the trademark search before the first tag (D13).
