@@ -1,9 +1,9 @@
 # qiick Excubia — Specification v0.1.0
 
-> Status: **DRAFT for approval.** This file and `docs/ARCHITECTURE.md` are the single source of truth for v0.1.0. Nothing is built until this PR is merged. Anything not written here is out of scope; new ideas become `needs-decision` proposal issues, not code.
+> Status: **APPROVED by Luca on 2026-10-31** (all recommendations in section 10 accepted). This file and `docs/ARCHITECTURE.md` are the single source of truth for v0.1.0. Anything not written here is out of scope; new ideas become `needs-decision` proposal issues, not code.
 >
 > Sources: `knowledge/projects/qiick/README.md` (roadmap Step 1, formerly Pervigilium / Specula), `knowledge/projects/qiick/excubia-brand.md`, `knowledge/projects/qiick/research/2026-10-22-beyond-qiick-ideas.md` (Addendum 2 "Laravel Health Check: MVP scope"), `knowledge/conventions/code-quality.md` (Codice Perfetto).
-> Items marked **[PROPOSAL]** are not in the knowledge base and need Luca's approval (see *Open decisions*).
+> Decisions D1–D13 and A1–A2 are final (section 10). Anything still marked **[PROPOSAL]** is not approved and must not be built; open a `needs-decision` issue instead.
 
 ## 1. Product
 
@@ -27,7 +27,7 @@ In scope:
 - A framework-agnostic PHP **core** (parsers, checks, data-source clients, cache, report model).
 - A **CLI** shipped in the same Composer package: `vendor/bin/excubia check` (standalone, no app boot) and, when installed in a Laravel app, the alias `php artisan excubia:check` (auto-discovered service provider). See Decision D1.
 - Inputs: `composer.lock` (required), `composer.json` (optional, for PHP constraint and direct vs. transitive deps), `package-lock.json` (optional), `package.json` / `.nvmrc` / `.node-version` (optional, Node version).
-- Output formats: `table` (default, human), `json`, `markdown`. `sarif` is a [PROPOSAL] (D6).
+- Output formats: `table` (default, human), `json`, `markdown`. `sarif` is deferred to v0.3.0 (D6).
 - Local file cache of data-source responses with TTLs, and `--offline` mode.
 - CI: own GitHub Actions workflow + first reusable workflow in `qiick-io/.github` (roadmap Step 1 explicitly includes "`qiick-io/.github` reusable workflows").
 - Release to Packagist as `qiick/excubia` v0.1.0.
@@ -38,7 +38,7 @@ In scope:
 - No web scanner in v0.1.0 (it is milestone v0.2.0, section 9; Decision D2).
 - No code changes to the scanned project (read-only; no auto-fix, no `composer update`).
 - No source-code analysis (that is laravel/vet's job); only manifests/lockfiles.
-- No AI summary in v0.1.0 unless D4 says otherwise (no metered services without Luca's approval).
+- No AI summary in v0.1.0 (D4; no metered services without Luca's approval).
 - No GitHub App / PR comments / scheduled multi-repo monitoring / badges (knowledge base "Later, Pro/CI mode").
 
 ## 3. Health checks
@@ -60,7 +60,7 @@ Severity levels: `critical` > `high` > `medium` > `low` > `info`. Each finding h
 Notes:
 - "180 days" and "24 months" are defaults, configurable (section 5).
 - `upgrade-plan` is a report section, never changes the exit code.
-- [PROPOSAL] `env-example-sync` (keys in `.env.example` vs. `config/*.php` `env()` calls) and `qiick-recommendations` (suggest `qiick/*` replacements) are mentioned in the knowledge base only as ideas ("better as a Health Check check", "Specula Health Check Recommendations"). Not in v0.1.0 unless approved (D8).
+- Not in v0.1.0 (D8): `env-example-sync` (keys in `.env.example` vs. `config/*.php` `env()` calls) and `qiick-recommendations` (suggest `qiick/*` replacements) are mentioned in the knowledge base only as ideas ("better as a Health Check check", "Specula Health Check Recommendations"). They become `needs-decision` proposal issues, not code.
 
 ## 4. CLI UX
 
@@ -153,18 +153,18 @@ Roadmap Step 1 includes "CLI + free zero-signup web scanner". Proposed as the ne
 - Abuse protections: per-IP rate limits, payload size caps (e.g. 2 000 packages), cached results, no storage of submitted data beyond the cache TTL, Impressum + privacy policy (Germany).
 - Domain verification is only needed for Phase B (probing URLs), not for lockfile scans.
 
-## 10. Open decisions (for Luca)
+## 10. Decisions (approved by Luca on 2026-10-31)
 
-1. **D1 CLI form:** standalone `vendor/bin/excubia` + Artisan alias `excubia:check`, or Artisan only? *Recommended:* both, one engine (works in CI and non-Laravel projects; KB says "Artisan command or Composer binary").
-2. **D2 Web scanner:** v0.2.0 after the CLI, and where (`qiick.io/excubia` vs `qiick.io/tools/laravel-health`)? *Recommended:* v0.2.0, at `qiick.io/excubia` (product routes live inside qiick.io).
-3. **D3 Tool runtime PHP:** ^8.2 or ^8.4 (fleet skeleton)? *Recommended:* ^8.2, to reach Laravel 11/12 apps.
-4. **D4 AI summary (KB check 7):** in v0.1.0? *Recommended:* no; ship a deterministic upgrade plan now, add an opt-in AI summary later with the user's own key (no metered qiick service).
-5. **D5 Packagist vendor:** claim `qiick` on Packagist with LucaGiardi20? *Recommended:* yes, before the first tag.
-6. **D6 SARIF output** (GitHub code scanning): v0.1.0 or later? *Recommended:* later (v0.3.0 with the GitHub Action), JSON/Markdown first.
-7. **D7 Node EOL check:** keep `node-eol` in v0.1.0 (brand copy promises "PHP/Node versions")? *Recommended:* yes, it is small.
-8. **D8 Extra checks** `env-example-sync` and `qiick-recommendations`: *Recommended:* not in v0.1.0; open as proposals.
-9. **D9 Config format:** `excubia.json` or `excubia.php`? *Recommended:* JSON (no Laravel boot, agent-friendly, JSON Schema).
-10. **D10 Default `--fail-on`:** `high` or `critical`? *Recommended:* `high`.
-11. **D11 Stale threshold:** 24 months without a release? *Recommended:* 24 months, configurable.
-12. **D12 Tagline:** keep placeholder "Health checks for Laravel apps." for v0.1.0? *Recommended:* yes until the website copy is final.
-13. **D13 Trademark similarity search** (TMview/EUIPO/WIPO for "Excubia") before the first public release? *Recommended:* yes, before tagging v0.1.0 (open item in the brand file).
+1. **D1 CLI form:** standalone `vendor/bin/excubia` + Artisan alias `excubia:check`, or Artisan only? **Decided:** both, one engine (works in CI and non-Laravel projects; KB says "Artisan command or Composer binary").
+2. **D2 Web scanner:** v0.2.0 after the CLI, and where (`qiick.io/excubia` vs `qiick.io/tools/laravel-health`)? **Decided:** v0.2.0, at `qiick.io/excubia` (product routes live inside qiick.io).
+3. **D3 Tool runtime PHP:** ^8.2 or ^8.4 (fleet skeleton)? **Decided:** ^8.2, to reach Laravel 11/12 apps.
+4. **D4 AI summary (KB check 7):** in v0.1.0? **Decided:** no; ship a deterministic upgrade plan now, add an opt-in AI summary later with the user's own key (no metered qiick service).
+5. **D5 Packagist vendor:** claim `qiick` on Packagist with LucaGiardi20? **Decided:** yes, before the first tag.
+6. **D6 SARIF output** (GitHub code scanning): v0.1.0 or later? **Decided:** later (v0.3.0 with the GitHub Action), JSON/Markdown first.
+7. **D7 Node EOL check:** keep `node-eol` in v0.1.0 (brand copy promises "PHP/Node versions")? **Decided:** yes, it is small.
+8. **D8 Extra checks** `env-example-sync` and `qiick-recommendations`: **Decided:** not in v0.1.0; open as proposals.
+9. **D9 Config format:** `excubia.json` or `excubia.php`? **Decided:** JSON (no Laravel boot, agent-friendly, JSON Schema).
+10. **D10 Default `--fail-on`:** `high` or `critical`? **Decided:** `high`.
+11. **D11 Stale threshold:** 24 months without a release? **Decided:** 24 months, configurable.
+12. **D12 Tagline:** keep placeholder "Health checks for Laravel apps." for v0.1.0? **Decided:** yes until the website copy is final.
+13. **D13 Trademark similarity search** (TMview/EUIPO/WIPO for "Excubia") before the first public release? **Decided:** yes, before tagging v0.1.0 (open item in the brand file).

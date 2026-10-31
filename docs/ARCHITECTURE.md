@@ -74,7 +74,7 @@ qiick-io/excubia
 
 Namespace root: `Qiick\Excubia\` (PSR-4 `src/`), tests `Qiick\Excubia\Tests\`.
 
-Note: `Parsers/*Parser`, `Renderers/*Renderer`, `Registries/*Registry`, `Contracts/*Contract` and `*Loader` are role suffixes not listed in the Codice Perfetto table (which is written for Laravel apps). They are proposed here as explicit package roles and must be enforced by arch tests; alternatively everything non-check becomes `*Service` (Open decision A1).
+Note: `Parsers/*Parser`, `Renderers/*Renderer`, `Registries/*Registry`, `Contracts/*Contract` and `*Loader` are role suffixes not listed in the Codice Perfetto table (which is written for Laravel apps). They are proposed here as explicit package roles and must be enforced by arch tests; Approved (A1): keep these suffixes, documented and enforced by arch tests.
 
 ## 2. Flow
 
@@ -132,7 +132,7 @@ interface HealthCheckContract
 - `qiick-io/.github/.github/workflows/php-package-ci.yml` (reusable): checkout, setup-php matrix, composer cache, Pint `--test`, PHPStan, Pest `--parallel`, SHA-pinned actions, concurrency + timeouts. Excubia is its first consumer; later Externa packages reuse it.
 - Dependabot for composer + github-actions.
 
-## 7. Open architecture decisions
+## 7. Architecture decisions (approved by Luca on 2026-10-31)
 
-- **A1** Extra role suffixes (`Parser`, `Renderer`, `Registry`, `Contract`, `Loader`) vs. folding them into `*Service`. *Recommended:* keep them, documented and arch-tested.
-- **A2** HTTP client: `symfony/http-client` (pairs with symfony/console, no Guzzle) vs Guzzle. *Recommended:* symfony/http-client.
+- **A1** Extra role suffixes (`Parser`, `Renderer`, `Registry`, `Contract`, `Loader`) vs. folding them into `*Service`. **Decided:** keep them, documented and arch-tested.
+- **A2** HTTP client: `symfony/http-client` (pairs with symfony/console, no Guzzle) vs Guzzle. **Decided:** symfony/http-client.
