@@ -49,4 +49,19 @@ final class EndOfLifeApiService
 
         return $cycles;
     }
+
+    /**
+     * Same as `cycles`, except a data-source outage returns null so a check
+     * can skip without depending on the exception type.
+     *
+     * @return list<EndOfLifeCycleData>|null
+     */
+    public function cyclesIfAvailable(string $product): ?array
+    {
+        try {
+            return $this->cycles($product);
+        } catch (DataSourceUnavailableException) {
+            return null;
+        }
+    }
 }
