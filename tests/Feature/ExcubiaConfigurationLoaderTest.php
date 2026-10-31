@@ -20,7 +20,7 @@ it('loads the spec example and matches an advisory id', function () {
     $root = temporaryProject([
         'excubia.json' => <<<'JSON'
 {
-  "$schema": "https://raw.githubusercontent.com/qiick-io/excubia/main/excubia.schema.json",
+  "$schema": "https://raw.githubusercontent.com/qiick-io/excubia-core/main/excubia.schema.json",
   "failOn": "high",
   "includeDev": true,
   "checks": {
