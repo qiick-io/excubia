@@ -46,4 +46,16 @@ final class GitHubRepositoryApiService
             pushedAt: is_string($document['pushed_at'] ?? null) ? $document['pushed_at'] : null,
         );
     }
+
+    /**
+     * Same as `repository`, except a data-source outage returns null.
+     */
+    public function repositoryIfAvailable(string $owner, string $name): ?GitHubRepositoryData
+    {
+        try {
+            return $this->repository($owner, $name);
+        } catch (DataSourceUnavailableException) {
+            return null;
+        }
+    }
 }
