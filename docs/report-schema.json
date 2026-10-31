@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/qiick-io/excubia/main/docs/report-schema.json",
+    "$id": "https://raw.githubusercontent.com/qiick-io/excubia-core/main/docs/report-schema.json",
     "title": "qiick Excubia health report",
     "description": "Version 1 of the JSON report. Upgrade steps never affect the process exit code. advisoryId is optional and exists so an ignore rule can name one advisory.",
     "type": "object",
