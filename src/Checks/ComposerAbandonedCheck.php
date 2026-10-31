@@ -15,8 +15,8 @@ use Qiick\Excubia\Enums\SeverityEnum;
 use Qiick\Excubia\Services\PackagistApiService;
 
 /**
- * Flags Packagist packages marked abandoned. Direct dependencies are high.
- * Transitive dependencies are medium.
+ * Flags Packagist packages marked abandoned. A direct dependency fails
+ * at high. A transitive dependency warns at medium.
  */
 final class ComposerAbandonedCheck implements HealthCheckContract
 {
@@ -52,7 +52,7 @@ final class ComposerAbandonedCheck implements HealthCheckContract
             $findings[] = new FindingData(
                 checkId: $this->id(),
                 severity: $package->isDirectDependency ? SeverityEnum::High : SeverityEnum::Medium,
-                status: FindingStatusEnum::Fail,
+                status: $package->isDirectDependency ? FindingStatusEnum::Fail : FindingStatusEnum::Warn,
                 subject: $package->name,
                 message: $package->isDirectDependency
                     ? 'Abandoned direct dependency.'

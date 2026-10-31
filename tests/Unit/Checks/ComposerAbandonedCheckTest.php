@@ -47,11 +47,24 @@ it('marks a direct abandoned package high and a transitive one medium', function
     ], [], null), ExcubiaConfigurationData::defaults());
 
     expect($result->status)->toBe(FindingStatusEnum::Fail)
+        ->and($result->findings[0]->status)->toBe(FindingStatusEnum::Fail)
         ->and($result->findings[0]->severity)->toBe(SeverityEnum::High)
         ->and($result->findings[0]->fixHint)->toBe('Replace with symfony/mailer.')
+        ->and($result->findings[1]->status)->toBe(FindingStatusEnum::Warn)
         ->and($result->findings[1]->severity)->toBe(SeverityEnum::Medium)
         ->and($result->findings[1]->fixHint)->toBe('no replacement suggested')
         ->and($result->findings)->toHaveCount(2);
+});
+
+it('warns when only a transitive dependency is abandoned', function () {
+    $result = abandonedCheck([
+        'https://repo.packagist.org/p2/old/lib.json' => packageDocument('old/lib', true),
+    ])->run(new ProjectSnapshotData(null, null, [
+        new LockedPackageData('old/lib', 'v1.0.0', false, false),
+    ], [], null), ExcubiaConfigurationData::defaults());
+
+    expect($result->status)->toBe(FindingStatusEnum::Warn)
+        ->and($result->findings[0]->severity)->toBe(SeverityEnum::Medium);
 });
 
 it('passes when nothing is abandoned and skips an outage', function () {
