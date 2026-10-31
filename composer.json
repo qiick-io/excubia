@@ -10,11 +10,11 @@
         "symfony/http-client": "^7.2"
     },
     "require-dev": {
-        "larastan/larastan": "^3.0",
+        "larastan/larastan": "^3.3.1",
         "laravel/pint": "^1.30.4 <1.31.0",
         "nunomaduro/collision": "^8.5",
         "pestphp/pest": "^4.0",
-        "phpstan/phpstan": "^2.0"
+        "phpstan/phpstan": "^2.1.11"
     },
     "suggest": {
         "illuminate/console": "Required for the php artisan excubia:check alias on Laravel 11, 12, and 13.",
