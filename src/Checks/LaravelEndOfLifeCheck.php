@@ -51,7 +51,7 @@ final class LaravelEndOfLifeCheck implements HealthCheckContract
         $major = $this->major($projectSnapshot->laravelFrameworkVersion);
         $cycle = $major === null ? null : $this->matchingCycle($major, $cycles);
 
-        if ($cycle === null || $major === null) {
+        if ($cycle === null) {
             return CheckResultData::skipped($this->id(), $this->name(), 'laravel/framework', 'No end-of-life cycle matches the locked Laravel version.');
         }
 
