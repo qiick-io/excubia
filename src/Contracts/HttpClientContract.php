@@ -14,27 +14,30 @@ use Qiick\Excubia\Exceptions\DataSourceUnavailableException;
 interface HttpClientContract
 {
     /**
-     * Fetch a JSON object.
+     * Fetch JSON. The body may be an object or a list.
      *
-     * Sends the URL and the query parameters only. Callers must not put
-     * file contents, paths, or secrets in either argument.
+     * Headers exist so a GitHub token can be sent without putting it in
+     * the URL or the cache key. Callers must not put file contents or
+     * project paths in the URL, the query, or the headers.
      *
-     * @param  array<string, scalar|null>  $queryParameters
-     * @return array<string, mixed>
+     * @param  array<string, scalar|list<scalar>|null>  $queryParameters
+     * @param  array<string, string>  $headers
+     * @return array<int|string, mixed>
      *
      * @throws DataSourceUnavailableException
      */
-    public function getJson(string $url, array $queryParameters = []): array;
+    public function getJson(string $url, array $queryParameters = [], array $headers = []): array;
 
     /**
-     * Post a JSON object and decode the JSON object that comes back.
+     * Post JSON and decode the JSON that comes back.
      *
      * The payload may contain package names and versions only.
      *
      * @param  array<string, mixed>  $payload
-     * @return array<string, mixed>
+     * @param  array<string, string>  $headers
+     * @return array<int|string, mixed>
      *
      * @throws DataSourceUnavailableException
      */
-    public function postJson(string $url, array $payload): array;
+    public function postJson(string $url, array $payload, array $headers = []): array;
 }
