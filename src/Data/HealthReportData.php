@@ -35,6 +35,35 @@ final readonly class HealthReportData
     }
 
     /**
+     * The human summary from the spec. Counts fail and warn findings only.
+     */
+    public function summaryLine(): string
+    {
+        $counts = [
+            'critical' => 0,
+            'high' => 0,
+            'medium' => 0,
+            'low' => 0,
+        ];
+
+        foreach ($this->findings() as $finding) {
+            if ($finding->status !== FindingStatusEnum::Fail && $finding->status !== FindingStatusEnum::Warn) {
+                continue;
+            }
+
+            $severity = $finding->severity->value;
+
+            if (! isset($counts[$severity])) {
+                continue;
+            }
+
+            $counts[$severity]++;
+        }
+
+        return $counts['critical'].' critical · '.$counts['high'].' high · '.$counts['medium'].' medium · '.$counts['low'].' low';
+    }
+
+    /**
      * Every finding, in check order. Pass rows are included.
      *
      * @return list<FindingData>
