@@ -17,7 +17,9 @@ it('keeps Pest on PHP 8.3 and newer and does not call the reusable workflow', fu
 });
 
 it('passes the checks coverage gate when no check class exists', function () {
-    [$exitCode, $output] = runCoverageGate('/does/not/exist.xml', dirname(__DIR__, 2).'/src/Checks');
+    $emptyDirectory = sys_get_temp_dir().'/excubia-empty-checks-'.bin2hex(random_bytes(4));
+    mkdir($emptyDirectory);
+    [$exitCode, $output] = runCoverageGate('/does/not/exist.xml', $emptyDirectory);
 
     expect($exitCode)->toBe(0)
         ->and($output)->toContain('not applied');
