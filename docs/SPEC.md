@@ -1,0 +1,170 @@
+# qiick Excubia — Specification v0.1.0
+
+> Status: **APPROVED by Luca on 2026-10-31** (all recommendations in section 10 accepted). This file and `docs/ARCHITECTURE.md` are the single source of truth for v0.1.0. Anything not written here is out of scope; new ideas become `needs-decision` proposal issues, not code.
+>
+> Sources: `knowledge/projects/qiick/README.md` (roadmap Step 1, formerly Pervigilium / Specula), `knowledge/projects/qiick/excubia-brand.md`, `knowledge/projects/qiick/research/2026-10-22-beyond-qiick-ideas.md` (Addendum 2 "Laravel Health Check: MVP scope"), `knowledge/conventions/code-quality.md` (Codice Perfetto).
+> Decisions D1–D13 and A1–A2 are final (section 10). Anything still marked **[PROPOSAL]** is not approved and must not be built; open a `needs-decision` issue instead.
+
+## 1. Product
+
+**qiick Excubia** is an open-source (MIT) health check for Laravel projects. It reads a project's lockfiles and manifests and reports, in one place: PHP / Laravel / Node end of life, known vulnerabilities, abandoned and stale packages, blockers for the next Laravel major, and a suggested upgrade order.
+
+Why it exists (knowledge base): `composer audit` only checks CVEs; laravelversions.com only shows EOL; Laravel Shift is paid per upgrade; laravel/vet reviews package code (complementary); LaraPlugins scores single packages, not your project; Enlightn is archived. Nothing combines EOL, CVEs, abandoned packages, upgrade order and a summary in one report.
+
+It is roadmap **Step 1, Phase A** of the qiick suite. Phase B (uptime, connectors, runtime probe `qiick/excubia-probe`) is roadmap Step 4 and is **not** part of this spec.
+
+Branding: always **"qiick Excubia"** (package `qiick/excubia`, repo `qiick-io/excubia`). Never "Excubia" alone in headings, never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
+
+### Target users
+1. Laravel developers and freelancers maintaining one or more apps.
+2. Agencies with many client apps that need a quick "how bad is it?" report before quoting an upgrade.
+3. CI pipelines (GitHub Actions) that should fail on critical findings.
+4. AI coding agents (Cursor, Claude Code) that run the CLI and read JSON/Markdown output (Agent-First rule).
+
+## 2. Scope v0.1.0
+
+In scope:
+- A framework-agnostic PHP **core** (parsers, checks, data-source clients, cache, report model).
+- A **CLI** shipped in the same Composer package: `vendor/bin/excubia check` (standalone, no app boot) and, when installed in a Laravel app, the alias `php artisan excubia:check` (auto-discovered service provider). See Decision D1.
+- Inputs: `composer.lock` (required), `composer.json` (optional, for PHP constraint and direct vs. transitive deps), `package-lock.json` (optional), `package.json` / `.nvmrc` / `.node-version` (optional, Node version).
+- Output formats: `table` (default, human), `json`, `markdown`. `sarif` is deferred to v0.3.0 (D6).
+- Local file cache of data-source responses with TTLs, and `--offline` mode.
+- CI: own GitHub Actions workflow + first reusable workflow in `qiick-io/.github` (roadmap Step 1 explicitly includes "`qiick-io/.github` reusable workflows").
+- Release to Packagist as `qiick/excubia` v0.1.0.
+
+### Explicit NON-goals for v0.1.0
+- No uptime monitoring, multi-region probes, connectors or runtime probe (Phase B, Step 4).
+- No paid features, no qiick Cloud, no accounts, no login, no telemetry.
+- No web scanner in v0.1.0 (it is milestone v0.2.0, section 9; Decision D2).
+- No code changes to the scanned project (read-only; no auto-fix, no `composer update`).
+- No source-code analysis (that is laravel/vet's job); only manifests/lockfiles.
+- No AI summary in v0.1.0 (D4; no metered services without Luca's approval).
+- No GitHub App / PR comments / scheduled multi-repo monitoring / badges (knowledge base "Later, Pro/CI mode").
+
+## 3. Health checks
+
+Severity levels: `critical` > `high` > `medium` > `low` > `info`. Each finding has: `checkId`, `severity`, `status` (`pass` | `warn` | `fail` | `skipped`), `subject` (package or runtime), `message`, `fixHint`, `evidenceUrl`.
+
+| ID | Name | Inspects | Data source | Fail | Warn | Pass | Fix hint |
+|---|---|---|---|---|---|---|---|
+| `php-eol` | PHP end of life | Resolved PHP version: `config.platform.php` > `require.php` lower bound in `composer.json` > `platform` in `composer.lock` | endoflife.date `php` | Security support ended (**critical**) | Active support ended, security support ends within 180 days (**medium**) | Supported | "Upgrade PHP to X.Y (supported until DATE)." |
+| `laravel-eol` | Laravel end of life | Locked `laravel/framework` version | endoflife.date `laravel` | Security fixes ended (**critical**) | Bug fixes ended or security ends within 180 days (**medium**) | Supported | "Upgrade to Laravel N; security fixes for your version end DATE." |
+| `node-eol` | Node end of life | `.nvmrc`, `.node-version`, `package.json` `engines.node` | endoflife.date `nodejs` | EOL (**high**) | Maintenance ends within 180 days (**low**) | Supported / `skipped` if not declared | "Move to Node LTS N." (Brand copy mentions PHP/Node versions; D7) |
+| `composer-advisories` | Known vulnerabilities (Composer) | Every locked package + version (incl. dev, flag `--no-dev` to exclude) | Packagist security advisories API (GitHub Advisory DB + FriendsOfPHP) | Any advisory affecting the locked version; severity mapped from advisory (critical/high/medium/low) | — | No advisories | "Update vendor/package to ≥ fixed version (advisory ID)." |
+| `npm-advisories` | Known vulnerabilities (npm) | Every package in `package-lock.json` (v2/v3) | OSV.dev batch query | Any vulnerability affecting the locked version (severity from OSV/CVSS, default medium) | — | None / `skipped` if no lockfile | "Update package to ≥ fixed version." |
+| `composer-abandoned` | Abandoned packages | Packagist `abandoned` flag of each locked package | Packagist metadata | Abandoned, direct dependency (**high**) | Abandoned, transitive (**medium**) | Not abandoned | "Replace with `<suggested replacement>`" (from Packagist), or "no replacement suggested" |
+| `composer-stale` | Stale packages | Last release date (Packagist) and GitHub `archived` / last push | Packagist metadata + GitHub API (unauthenticated, optional `GITHUB_TOKEN`) | Repository archived (**high**) | No release for > 24 months (**low**, threshold configurable) | Recent release | "Consider a maintained alternative." Demo case: `jenssegers/agent` |
+| `laravel-next-blocker` | Next-major blockers | For each direct dependency requiring `illuminate/*` or `laravel/framework`: does its **latest** release allow the next Laravel major (today `^13`)? | Packagist metadata | Latest release does not allow next major (**medium**) | Allows it only in a pre-release (**low**) | Allows it / not Laravel-dependent | "No release supports Laravel N yet; watch / replace / fork." |
+| `upgrade-plan` | Upgrade order | Combines the above into an ordered list: security fixes → runtime EOL (PHP) → blockers → Laravel major → stale/abandoned replacements | Derived | — (always `info`) | — | — | Ordered, numbered steps |
+
+Notes:
+- "180 days" and "24 months" are defaults, configurable (section 5).
+- `upgrade-plan` is a report section, never changes the exit code.
+- Not in v0.1.0 (D8): `env-example-sync` (keys in `.env.example` vs. `config/*.php` `env()` calls) and `qiick-recommendations` (suggest `qiick/*` replacements) are mentioned in the knowledge base only as ideas ("better as a Health Check check", "Specula Health Check Recommendations"). They become `needs-decision` proposal issues, not code.
+
+## 4. CLI UX
+
+```
+vendor/bin/excubia check [path] [options]
+php artisan excubia:check [options]          # same engine, path = base_path()
+
+Options:
+  --format=table|json|markdown   Output format (default: table)
+  --output=FILE                  Write report to FILE instead of stdout
+  --fail-on=critical|high|medium|low|none   Minimum severity that makes the exit code 1 (default: high)
+  --only=ID,ID                   Run only these checks
+  --skip=ID,ID                   Skip these checks
+  --no-dev                       Ignore require-dev / packages-dev
+  --offline                      Use cache only; checks without cached data are `skipped`
+  --no-cache                     Bypass the cache
+  --config=FILE                  Config file (default: ./excubia.json if present)
+  --no-banner                    Hide the ASCII banner (brand/excubia/cli/banner.txt)
+  -q | -v | -vv                  Quiet / verbose / debug (HTTP calls listed)
+
+vendor/bin/excubia cache:clear
+vendor/bin/excubia --version
+```
+
+Exit codes:
+- `0` no finding at or above `--fail-on`
+- `1` at least one finding at or above `--fail-on`
+- `2` usage or configuration error (missing `composer.lock`, invalid config, unknown check id)
+- `3` data-source failure that made a non-skippable check impossible (network down and no cache) — only when `--strict` is passed; otherwise affected checks are `skipped` with a warning and exit code ignores them. [PROPOSAL: `--strict`]
+
+Table output: grouped by severity, coloured (no colour when not a TTY or `NO_COLOR`), summary line `3 critical · 2 high · 5 medium · 1 low` and the upgrade plan at the end. JSON output schema is versioned (`"schemaVersion": 1`) and documented in `docs/report-schema.json`.
+
+## 5. Config file
+
+`excubia.json` at the project root (JSON so it works without Laravel and is easy for agents to edit):
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/qiick-io/excubia/main/excubia.schema.json",
+  "failOn": "high",
+  "includeDev": true,
+  "checks": {
+    "composer-stale": { "staleAfterMonths": 24 },
+    "php-eol": { "warnDaysBeforeEol": 180 },
+    "laravel-eol": { "warnDaysBeforeEol": 180 },
+    "node-eol": { "enabled": true }
+  },
+  "ignore": [
+    { "checkId": "composer-advisories", "subject": "vendor/package", "advisoryId": "GHSA-xxxx", "reason": "Not reachable", "until": "2027-01-31" }
+  ],
+  "cache": { "directory": null, "ttlHours": 24 }
+}
+```
+
+Rules: every `ignore` entry needs a `reason`; an expired `until` makes the finding active again and prints a warning. Unknown keys are a config error (exit 2).
+
+## 6. Supported versions
+
+- Runtime of the tool: PHP **^8.2** so it installs as a dev dependency in Laravel 11, 12 and 13 apps (D3; the qiick app skeleton is PHP 8.4/8.5, but a CLI must reach older projects).
+- Artisan integration: Laravel 11, 12, 13.
+- Scanned projects: any Composer project; Laravel-specific checks are `skipped` when `laravel/framework` is not locked.
+- Lockfiles: `composer.lock` (Composer 2), `package-lock.json` lockfileVersion 2 and 3. `yarn.lock` / `pnpm-lock.yaml` are non-goals for v0.1.0.
+
+## 7. Security & privacy
+
+- Only package **names and versions** (and runtime versions) leave the machine, and only to the public APIs listed in section 3. No file contents, no `.env`, no source code, no paths, no hostnames.
+- No telemetry, no analytics, no phone-home.
+- `GITHUB_TOKEN` is optional, read from the environment only, never printed or written to the cache or report.
+- All HTTP over TLS with timeouts (connect 5 s, total 15 s) and limited retries with backoff; respects `HTTPS_PROXY`.
+- The tool never writes to the scanned project except `--output` and never executes project code (no app boot for `vendor/bin/excubia`).
+- `SECURITY.md` with private vulnerability reporting.
+
+## 8. Testing, CI, release
+
+- Pest 4 unit + feature tests; Pest architecture tests for Codice Perfetto (strict types, role suffixes, readonly `*Data`, no `dd`/`dump`/`env()`).
+- Fixtures: sample `composer.lock` / `composer.json` / `package-lock.json` sets in `tests/Fixtures/Projects/*` (healthy Laravel 13 app, outdated Laravel 10 app, abandoned/archived packages incl. `jenssegers/agent`, npm vulnerable lockfile, non-Laravel PHP project, broken lockfile).
+- No real network in tests: recorded API responses in `tests/Fixtures/Responses/*`, an HTTP client contract with a fake.
+- Static analysis: Larastan/PHPStan level max, Pint (`laravel` preset), Rector dry-run optional.
+- CI (`.github/workflows/ci.yml`): PHP matrix 8.2–8.5 × lowest/stable deps, Pint, PHPStan, Pest with coverage ≥ 90 % for `src/Checks`. Calls the reusable workflow `qiick-io/.github/.github/workflows/php-package-ci.yml` (created in this milestone; SHA-pinned actions).
+- Dogfooding: CI runs `bin/excubia check --fail-on=critical` on the repo itself.
+- Versioning: SemVer, Conventional Commits, tags `v0.1.0`, GitHub Releases with notes; Packagist `qiick/excubia` (D5: vendor `qiick` must be claimed on Packagist).
+- Branches: `main` (releases), `develop` (integration), feature branches `<type>/<issue>-<slug>`; squash merges only.
+
+## 9. Later milestone v0.2.0 — free zero-signup web scanner (NOT v0.1.0)
+
+Roadmap Step 1 includes "CLI + free zero-signup web scanner". Proposed as the next milestone, on the same core:
+- Page on `qiick.io/excubia` (or `qiick.io/tools/*`, D2) where users paste or drop `composer.lock` / `package-lock.json`.
+- Lockfiles are **parsed in the browser**; only names and versions are sent (knowledge base rule).
+- Laravel backend endpoint using the same core with queues, cache, rate limits (also the load study for the utilities suite).
+- Abuse protections: per-IP rate limits, payload size caps (e.g. 2 000 packages), cached results, no storage of submitted data beyond the cache TTL, Impressum + privacy policy (Germany).
+- Domain verification is only needed for Phase B (probing URLs), not for lockfile scans.
+
+## 10. Decisions (approved by Luca on 2026-10-31)
+
+1. **D1 CLI form:** standalone `vendor/bin/excubia` + Artisan alias `excubia:check`, or Artisan only? **Decided:** both, one engine (works in CI and non-Laravel projects; KB says "Artisan command or Composer binary").
+2. **D2 Web scanner:** v0.2.0 after the CLI, and where (`qiick.io/excubia` vs `qiick.io/tools/laravel-health`)? **Decided:** v0.2.0, at `qiick.io/excubia` (product routes live inside qiick.io).
+3. **D3 Tool runtime PHP:** ^8.2 or ^8.4 (fleet skeleton)? **Decided:** ^8.2, to reach Laravel 11/12 apps.
+4. **D4 AI summary (KB check 7):** in v0.1.0? **Decided:** no; ship a deterministic upgrade plan now, add an opt-in AI summary later with the user's own key (no metered qiick service).
+5. **D5 Packagist vendor:** claim `qiick` on Packagist with LucaGiardi20? **Decided:** yes, before the first tag.
+6. **D6 SARIF output** (GitHub code scanning): v0.1.0 or later? **Decided:** later (v0.3.0 with the GitHub Action), JSON/Markdown first.
+7. **D7 Node EOL check:** keep `node-eol` in v0.1.0 (brand copy promises "PHP/Node versions")? **Decided:** yes, it is small.
+8. **D8 Extra checks** `env-example-sync` and `qiick-recommendations`: **Decided:** not in v0.1.0; open as proposals.
+9. **D9 Config format:** `excubia.json` or `excubia.php`? **Decided:** JSON (no Laravel boot, agent-friendly, JSON Schema).
+10. **D10 Default `--fail-on`:** `high` or `critical`? **Decided:** `high`.
+11. **D11 Stale threshold:** 24 months without a release? **Decided:** 24 months, configurable.
+12. **D12 Tagline:** keep placeholder "Health checks for Laravel apps." for v0.1.0? **Decided:** yes until the website copy is final.
+13. **D13 Trademark similarity search** (TMview/EUIPO/WIPO for "Excubia") before the first public release? **Decided:** yes, before tagging v0.1.0 (open item in the brand file).
