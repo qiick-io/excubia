@@ -1,0 +1,12 @@
+{
+    "packages": [
+        {
+            "name": "laravel/framework",
+            "version": "v10.48.22"
+        }
+    ],
+    "packages-dev": [],
+    "platform": {
+        "php": "8.2.0"
+    }
+}

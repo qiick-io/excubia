@@ -1,0 +1,16 @@
+{
+    "packages": [
+        {
+            "name": "jenssegers/agent",
+            "version": "v2.6.4"
+        },
+        {
+            "name": "symfony/polyfill-php80",
+            "version": "v1.31.0"
+        }
+    ],
+    "packages-dev": [],
+    "platform": {
+        "php": "8.2.0"
+    }
+}
