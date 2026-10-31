@@ -45,6 +45,10 @@ arch('exceptions use the exception suffix')
     ->expect('Qiick\Excubia\Exceptions')
     ->toHaveSuffix('Exception');
 
+arch('configuration loaders use the loader suffix')
+    ->expect('Qiick\Excubia\Configuration')
+    ->toHaveSuffix('Loader');
+
 it('restricts health check dependencies once checks exist', function () {
     $checkDirectory = dirname(__DIR__, 2).'/src/Checks';
 
