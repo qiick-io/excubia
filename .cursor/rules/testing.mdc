@@ -1,0 +1,15 @@
+---
+description: Pest, Pint, and PHPStan for the qiick Excubia package.
+globs: "**/*Test.php"
+alwaysApply: false
+---
+
+# Testing
+
+- Prefer behavior-focused Pest tests over assertions on private structure.
+- Do not delete or weaken an existing test. Add coverage for a behavior change.
+- `tests/Arch/NamingArchitectureTest.php` stays green.
+- No real network. Use the fake HTTP client and the recorded responses under `tests/Fixtures/Responses/`.
+- The package floor is PHP ^8.2. Pest runs on PHP 8.3 and newer. There is no PHP 8.2 Pest job.
+- Quality gate before a pull request: `composer lint`, `composer analyse`, and `composer test`.
+- This package has no npm, Vitest, or `php artisan test` suite.
