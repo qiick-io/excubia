@@ -1,8 +1,30 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "qiick/excubia-core",
     "description": "Health checks for Laravel apps.",
     "type": "library",
+    "keywords": [
+        "excubia",
+        "qiick",
+        "laravel",
+        "health-check",
+        "composer",
+        "cli",
+        "security",
+        "php"
+    ],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Qiick",
+            "homepage": "https://qiick.io"
+        }
+    ],
+    "homepage": "https://github.com/qiick-io/excubia-core",
+    "support": {
+        "issues": "https://github.com/qiick-io/excubia-core/issues",
+        "source": "https://github.com/qiick-io/excubia-core"
+    },
     "require": {
         "php": "^8.2",
         "composer/semver": "^3.4",
