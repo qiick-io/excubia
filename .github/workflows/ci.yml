@@ -59,3 +59,6 @@ jobs:
 
       - name: src/Checks coverage
         run: php .github/assert-checks-coverage.php build/clover.xml
+
+      - name: Dogfood
+        run: php bin/excubia check --fail-on=critical --no-banner

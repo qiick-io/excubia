@@ -16,9 +16,19 @@
         "pestphp/pest": "^4.0",
         "phpstan/phpstan": "^2.1.11"
     },
+    "bin": [
+        "bin/excubia"
+    ],
     "suggest": {
         "illuminate/console": "Required for the php artisan excubia:check alias on Laravel 11, 12, and 13.",
         "illuminate/support": "Required for the php artisan excubia:check alias on Laravel 11, 12, and 13."
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Qiick\\Excubia\\Laravel\\ExcubiaServiceProvider"
+            ]
+        }
     },
     "autoload": {
         "psr-4": {

@@ -57,6 +57,38 @@ final class ResponseCacheService
     }
 
     /**
+     * Delete cached response files. A missing directory is already clear.
+     *
+     * Only the cache directory is touched. The scanned project is not.
+     *
+     * @throws InvalidConfigurationException
+     */
+    public function clear(): void
+    {
+        $directory = $this->directory();
+
+        if (! is_dir($directory)) {
+            return;
+        }
+
+        $files = glob($directory.DIRECTORY_SEPARATOR.'*.json');
+
+        if ($files === false) {
+            throw new InvalidConfigurationException('The response cache could not be listed.');
+        }
+
+        foreach ($files as $file) {
+            if (! is_file($file)) {
+                continue;
+            }
+
+            if (! unlink($file)) {
+                throw new InvalidConfigurationException('The response cache could not be cleared.');
+            }
+        }
+    }
+
+    /**
      * @return array<int|string, mixed>|null
      */
     private function read(string $cacheKey): ?array
