@@ -1,0 +1,33 @@
+---
+description: Codice Perfetto for the qiick Excubia PHP package. The spec wins if this rule disagrees.
+alwaysApply: true
+---
+
+# Codice Perfetto for qiick Excubia
+
+`docs/SPEC.md` and `docs/ARCHITECTURE.md` are the source of truth. This rule does not add product scope.
+
+## Ponytail
+
+Pick the simplest solution that works. Stop at the first rung that holds: YAGNI, standard library, platform, installed dependency, one line, then the minimum code.
+
+- No unrequested abstractions, dependencies, or boilerplate.
+- Deletion over addition. Boring over clever. Fewest files possible.
+- Mark an intentional shortcut with a `ponytail:` comment that names the ceiling and the upgrade path.
+- Not lazy about trust-boundary validation, data-loss prevention, security, or anything explicitly requested.
+- Non-trivial logic leaves one runnable check behind.
+
+## Names
+
+- Full words. No `cfg`, `res`, `req`, `val`, `ctx`, or `idx`.
+- Loop indices `i`, `j`, and `k` only in tight numeric loops.
+- Booleans and boolean methods use `is`, `has`, `can`, or `should`.
+- Role suffixes match the architecture test: `Check`, `Contract`, `Data` (readonly), `Enum`, `Service`, `Parser`, `Renderer`, `Registry`, `Loader`, `Exception`.
+- There are no Eloquent models, controllers, policies, jobs, or actions in this package. Do not add those layers.
+
+## Documentation
+
+- `declare(strict_types=1)` in every PHP file.
+- English PHPDoc on classes and non-trivial methods: why, array shapes, side effects, and `@throws`. Not line-by-line noise.
+- Explicit curly braces and a blank line around control-flow blocks.
+- Do not call `dd`, `dump`, `var_dump`, or `env()`.
