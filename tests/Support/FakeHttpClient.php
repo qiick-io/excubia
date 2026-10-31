@@ -13,23 +13,38 @@ use Qiick\Excubia\Exceptions\DataSourceUnavailableException;
  */
 final class FakeHttpClient implements HttpClientContract
 {
+    public int $calls = 0;
+
+    /** @var array<string, string> */
+    public array $lastHeaders = [];
+
+    /** @var array<string, scalar|list<scalar>|null> */
+    public array $lastQuery = [];
+
     /**
-     * @param  array<string, array<string, mixed>>  $responses
+     * @param  array<string, array<int|string, mixed>>  $responses
      */
     public function __construct(private readonly array $responses) {}
 
-    public function getJson(string $url, array $queryParameters = []): array
+    public function getJson(string $url, array $queryParameters = [], array $headers = []): array
     {
+        $this->calls++;
+        $this->lastHeaders = $headers;
+        $this->lastQuery = $queryParameters;
+
         return $this->responseFor($url);
     }
 
-    public function postJson(string $url, array $payload): array
+    public function postJson(string $url, array $payload, array $headers = []): array
     {
+        $this->calls++;
+        $this->lastHeaders = $headers;
+
         return $this->responseFor($url);
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int|string, mixed>
      */
     private function responseFor(string $url): array
     {
