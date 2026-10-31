@@ -1,0 +1,14 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: max
+    paths:
+        - src
+    tmpDir: build/phpstan
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    # Larastan calls config_path() when this list is empty. This package has
+    # no config directory; env() is already forbidden by the architecture test.
+    configDirectories:
+        - build/phpstan-config

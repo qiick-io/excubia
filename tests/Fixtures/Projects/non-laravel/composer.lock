@@ -1,0 +1,12 @@
+{
+    "packages": [
+        {
+            "name": "symfony/console",
+            "version": "v7.2.0"
+        }
+    ],
+    "packages-dev": [],
+    "platform": {
+        "php": "8.2.0"
+    }
+}

@@ -1,0 +1,95 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/qiick-io/excubia-core/main/docs/report-schema.json",
+    "title": "qiick Excubia health report",
+    "description": "Version 1 of the JSON report. Upgrade steps never affect the process exit code. advisoryId is optional and exists so an ignore rule can name one advisory.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["schemaVersion", "checks", "upgradePlan"],
+    "properties": {
+        "schemaVersion": {
+            "const": 1
+        },
+        "checks": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/check"
+            }
+        },
+        "upgradePlan": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/upgradeStep"
+            }
+        }
+    },
+    "$defs": {
+        "check": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["checkId", "name", "status", "findings"],
+            "properties": {
+                "checkId": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "enum": ["pass", "warn", "fail", "skipped"]
+                },
+                "findings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/finding"
+                    }
+                }
+            }
+        },
+        "finding": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["checkId", "severity", "status", "subject", "message", "fixHint", "evidenceUrl"],
+            "properties": {
+                "checkId": {
+                    "type": "string"
+                },
+                "severity": {
+                    "enum": ["critical", "high", "medium", "low", "info"]
+                },
+                "status": {
+                    "enum": ["pass", "warn", "fail", "skipped"]
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "fixHint": {
+                    "type": "string"
+                },
+                "evidenceUrl": {
+                    "type": ["string", "null"]
+                },
+                "advisoryId": {
+                    "type": ["string", "null"]
+                }
+            }
+        },
+        "upgradeStep": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["stepNumber", "message"],
+            "properties": {
+                "stepNumber": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

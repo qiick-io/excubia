@@ -1,0 +1,46 @@
+{
+    "name": "qiick/excubia-core",
+    "description": "Health checks for Laravel apps.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "composer/semver": "^3.4",
+        "symfony/console": "^7.2",
+        "symfony/http-client": "^7.2"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.3.1",
+        "laravel/pint": "^1.30.4 <1.31.0",
+        "nunomaduro/collision": "^8.5",
+        "pestphp/pest": "^4.0",
+        "phpstan/phpstan": "^2.1.11"
+    },
+    "suggest": {
+        "illuminate/console": "Required for the php artisan excubia:check alias on Laravel 11, 12, and 13.",
+        "illuminate/support": "Required for the php artisan excubia:check alias on Laravel 11, 12, and 13."
+    },
+    "autoload": {
+        "psr-4": {
+            "Qiick\\Excubia\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Qiick\\Excubia\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "lint": "pint --test",
+        "analyse": "phpstan analyse --memory-limit=1G"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        },
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

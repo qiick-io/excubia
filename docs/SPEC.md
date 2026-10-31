@@ -13,7 +13,7 @@ Why it exists (knowledge base): `composer audit` only checks CVEs; laravelversio
 
 It is roadmap **Step 1, Phase A** of the qiick suite. Phase B (uptime, connectors, runtime probe `qiick/excubia-probe`) is roadmap Step 4 and is **not** part of this spec.
 
-Branding: always **"qiick Excubia"** (package `qiick/excubia`, repo `qiick-io/excubia`). Never "Excubia" alone in headings, never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
+Branding: always **"qiick Excubia"** (package `qiick/excubia-core`, repo `qiick-io/excubia-core`). Never "Excubia" alone in headings, never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
 
 ### Target users
 1. Laravel developers and freelancers maintaining one or more apps.
@@ -30,7 +30,7 @@ In scope:
 - Output formats: `table` (default, human), `json`, `markdown`. `sarif` is deferred to v0.3.0 (D6).
 - Local file cache of data-source responses with TTLs, and `--offline` mode.
 - CI: own GitHub Actions workflow + first reusable workflow in `qiick-io/.github` (roadmap Step 1 explicitly includes "`qiick-io/.github` reusable workflows").
-- Release to Packagist as `qiick/excubia` v0.1.0.
+- Release to Packagist as `qiick/excubia-core` v0.1.0.
 
 ### Explicit NON-goals for v0.1.0
 - No uptime monitoring, multi-region probes, connectors or runtime probe (Phase B, Step 4).
@@ -43,7 +43,7 @@ In scope:
 
 ## 3. Health checks
 
-Severity levels: `critical` > `high` > `medium` > `low` > `info`. Each finding has: `checkId`, `severity`, `status` (`pass` | `warn` | `fail` | `skipped`), `subject` (package or runtime), `message`, `fixHint`, `evidenceUrl`.
+Severity levels: `critical` > `high` > `medium` > `low` > `info`. Each finding has: `checkId`, `severity`, `status` (`pass` | `warn` | `fail` | `skipped`), `subject` (package or runtime), `message`, `fixHint`, `evidenceUrl`, and `advisoryId` (so an ignore rule can match one advisory).
 
 | ID | Name | Inspects | Data source | Fail | Warn | Pass | Fix hint |
 |---|---|---|---|---|---|---|---|
@@ -60,6 +60,8 @@ Severity levels: `critical` > `high` > `medium` > `low` > `info`. Each finding h
 Notes:
 - "180 days" and "24 months" are defaults, configurable (section 5).
 - `upgrade-plan` is a report section, never changes the exit code.
+- Node version precedence is `.nvmrc` > `.node-version` > `package.json` `engines.node`.
+- The next Laravel major is the locked `laravel/framework` major plus one, not a fixed `^13`.
 - Not in v0.1.0 (D8): `env-example-sync` (keys in `.env.example` vs. `config/*.php` `env()` calls) and `qiick-recommendations` (suggest `qiick/*` replacements) are mentioned in the knowledge base only as ideas ("better as a Health Check check", "Specula Health Check Recommendations"). They become `needs-decision` proposal issues, not code.
 
 ## 4. CLI UX
@@ -88,7 +90,7 @@ vendor/bin/excubia --version
 Exit codes:
 - `0` no finding at or above `--fail-on`
 - `1` at least one finding at or above `--fail-on`
-- `2` usage or configuration error (missing `composer.lock`, invalid config, unknown check id)
+- `2` usage or configuration error (missing `composer.lock`, broken or unparseable `composer.lock`, invalid config, unknown check id). The error message says what is wrong.
 - `3` data-source failure that made a non-skippable check impossible (network down and no cache) — only when `--strict` is passed; otherwise affected checks are `skipped` with a warning and exit code ignores them. [PROPOSAL: `--strict`]
 
 Table output: grouped by severity, coloured (no colour when not a TTY or `NO_COLOR`), summary line `3 critical · 2 high · 5 medium · 1 low` and the upgrade plan at the end. JSON output schema is versioned (`"schemaVersion": 1`) and documented in `docs/report-schema.json`.
@@ -99,7 +101,7 @@ Table output: grouped by severity, coloured (no colour when not a TTY or `NO_COL
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/qiick-io/excubia/main/excubia.schema.json",
+  "$schema": "https://raw.githubusercontent.com/qiick-io/excubia-core/main/excubia.schema.json",
   "failOn": "high",
   "includeDev": true,
   "checks": {
@@ -119,7 +121,7 @@ Rules: every `ignore` entry needs a `reason`; an expired `until` makes the findi
 
 ## 6. Supported versions
 
-- Runtime of the tool: PHP **^8.2** so it installs as a dev dependency in Laravel 11, 12 and 13 apps (D3; the qiick app skeleton is PHP 8.4/8.5, but a CLI must reach older projects).
+- Runtime of the tool: PHP **^8.2** so it installs as a dev dependency in Laravel 11, 12 and 13 apps (D3; the qiick app skeleton is PHP 8.4/8.5, but a CLI must reach older projects). Pest and the CI test jobs run on PHP 8.3 and newer only. There is no PHP 8.2 Pest job.
 - Artisan integration: Laravel 11, 12, 13.
 - Scanned projects: any Composer project; Laravel-specific checks are `skipped` when `laravel/framework` is not locked.
 - Lockfiles: `composer.lock` (Composer 2), `package-lock.json` lockfileVersion 2 and 3. `yarn.lock` / `pnpm-lock.yaml` are non-goals for v0.1.0.
@@ -139,9 +141,9 @@ Rules: every `ignore` entry needs a `reason`; an expired `until` makes the findi
 - Fixtures: sample `composer.lock` / `composer.json` / `package-lock.json` sets in `tests/Fixtures/Projects/*` (healthy Laravel 13 app, outdated Laravel 10 app, abandoned/archived packages incl. `jenssegers/agent`, npm vulnerable lockfile, non-Laravel PHP project, broken lockfile).
 - No real network in tests: recorded API responses in `tests/Fixtures/Responses/*`, an HTTP client contract with a fake.
 - Static analysis: Larastan/PHPStan level max, Pint (`laravel` preset), Rector dry-run optional.
-- CI (`.github/workflows/ci.yml`): PHP matrix 8.2–8.5 × lowest/stable deps, Pint, PHPStan, Pest with coverage ≥ 90 % for `src/Checks`. Calls the reusable workflow `qiick-io/.github/.github/workflows/php-package-ci.yml` (created in this milestone; SHA-pinned actions).
+- CI (`.github/workflows/ci.yml`): Pest, Pint, and PHPStan on PHP 8.3–8.5 × lowest/stable deps. The package floor stays PHP ^8.2. No PHP 8.2 Pest job. Pest coverage ≥ 90 % for `src/Checks`. The reusable workflow `qiick-io/.github/.github/workflows/php-package-ci.yml` remains the intended home; until that repository is available the jobs live in this repo. SHA-pinned actions.
 - Dogfooding: CI runs `bin/excubia check --fail-on=critical` on the repo itself.
-- Versioning: SemVer, Conventional Commits, tags `v0.1.0`, GitHub Releases with notes; Packagist `qiick/excubia` (D5: vendor `qiick` must be claimed on Packagist).
+- Versioning: SemVer, Conventional Commits, tags `v0.1.0`, GitHub Releases with notes; Packagist `qiick/excubia-core` (D5: vendor `qiick` must be claimed on Packagist).
 - Branches: `main` (releases), `develop` (integration), feature branches `<type>/<issue>-<slug>`; squash merges only.
 
 ## 9. Later milestone v0.2.0 — free zero-signup web scanner (NOT v0.1.0)
@@ -168,3 +170,13 @@ Roadmap Step 1 includes "CLI + free zero-signup web scanner". Proposed as the ne
 11. **D11 Stale threshold:** 24 months without a release? **Decided:** 24 months, configurable.
 12. **D12 Tagline:** keep placeholder "Health checks for Laravel apps." for v0.1.0? **Decided:** yes until the website copy is final.
 13. **D13 Trademark similarity search** (TMview/EUIPO/WIPO for "Excubia") before the first public release? **Decided:** yes, before tagging v0.1.0 (open item in the brand file).
+
+## 11. Clarifications (Luca, 2026-10-31)
+
+These five answers are final.
+
+1. The package floor stays PHP ^8.2. Pest and the CI test jobs run on PHP 8.3 and newer only. There is no PHP 8.2 Pest job.
+2. Node version precedence is `.nvmrc`, then `.node-version`, then `package.json` `engines.node`.
+3. The next Laravel major is the locked `laravel/framework` major plus one. It is not a fixed `^13`.
+4. A broken or unparseable `composer.lock` is exit code 2, with a clear error message.
+5. `advisoryId` is a finding field so an ignore rule can match that advisory.

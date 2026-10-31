@@ -1,0 +1,105 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/qiick-io/excubia-core/main/excubia.schema.json",
+    "title": "qiick Excubia configuration",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "failOn": {
+            "enum": ["critical", "high", "medium", "low", "none"]
+        },
+        "includeDev": {
+            "type": "boolean"
+        },
+        "checks": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "composer-stale": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "staleAfterMonths": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                },
+                "php-eol": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "warnDaysBeforeEol": {
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    }
+                },
+                "laravel-eol": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "warnDaysBeforeEol": {
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    }
+                },
+                "node-eol": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "ignore": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["checkId", "subject", "reason"],
+                "properties": {
+                    "checkId": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "subject": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "advisoryId": {
+                        "type": ["string", "null"]
+                    },
+                    "reason": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "until": {
+                        "type": ["string", "null"],
+                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+                    }
+                }
+            }
+        },
+        "cache": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "directory": {
+                    "type": ["string", "null"]
+                },
+                "ttlHours": {
+                    "type": "integer",
+                    "minimum": 0
+                }
+            }
+        }
+    }
+}
