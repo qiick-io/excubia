@@ -13,7 +13,7 @@ Why it exists (knowledge base): `composer audit` only checks CVEs; laravelversio
 
 It is roadmap **Step 1, Phase A** of the qiick suite. Phase B (uptime, connectors, runtime probe `qiick/excubia-probe`) is roadmap Step 4 and is **not** part of this spec.
 
-Branding: always **"qiick Excubia"** (package `qiick/excubia`, repo `qiick-io/excubia`). Never "Excubia" alone in headings, never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
+Branding: always **"qiick Excubia"** (package `qiick/excubia-core`, repo `qiick-io/excubia-core`). Never "Excubia" alone in headings, never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
 
 ### Target users
 1. Laravel developers and freelancers maintaining one or more apps.
@@ -30,7 +30,7 @@ In scope:
 - Output formats: `table` (default, human), `json`, `markdown`. `sarif` is deferred to v0.3.0 (D6).
 - Local file cache of data-source responses with TTLs, and `--offline` mode.
 - CI: own GitHub Actions workflow + first reusable workflow in `qiick-io/.github` (roadmap Step 1 explicitly includes "`qiick-io/.github` reusable workflows").
-- Release to Packagist as `qiick/excubia` v0.1.0.
+- Release to Packagist as `qiick/excubia-core` v0.1.0.
 
 ### Explicit NON-goals for v0.1.0
 - No uptime monitoring, multi-region probes, connectors or runtime probe (Phase B, Step 4).
@@ -101,7 +101,7 @@ Table output: grouped by severity, coloured (no colour when not a TTY or `NO_COL
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/qiick-io/excubia/main/excubia.schema.json",
+  "$schema": "https://raw.githubusercontent.com/qiick-io/excubia-core/main/excubia.schema.json",
   "failOn": "high",
   "includeDev": true,
   "checks": {
@@ -143,7 +143,7 @@ Rules: every `ignore` entry needs a `reason`; an expired `until` makes the findi
 - Static analysis: Larastan/PHPStan level max, Pint (`laravel` preset), Rector dry-run optional.
 - CI (`.github/workflows/ci.yml`): Pest, Pint, and PHPStan on PHP 8.3–8.5 × lowest/stable deps. The package floor stays PHP ^8.2. No PHP 8.2 Pest job. Pest coverage ≥ 90 % for `src/Checks`. The reusable workflow `qiick-io/.github/.github/workflows/php-package-ci.yml` remains the intended home; until that repository is available the jobs live in this repo. SHA-pinned actions.
 - Dogfooding: CI runs `bin/excubia check --fail-on=critical` on the repo itself.
-- Versioning: SemVer, Conventional Commits, tags `v0.1.0`, GitHub Releases with notes; Packagist `qiick/excubia` (D5: vendor `qiick` must be claimed on Packagist).
+- Versioning: SemVer, Conventional Commits, tags `v0.1.0`, GitHub Releases with notes; Packagist `qiick/excubia-core` (D5: vendor `qiick` must be claimed on Packagist).
 - Branches: `main` (releases), `develop` (integration), feature branches `<type>/<issue>-<slug>`; squash merges only.
 
 ## 9. Later milestone v0.2.0 — free zero-signup web scanner (NOT v0.1.0)

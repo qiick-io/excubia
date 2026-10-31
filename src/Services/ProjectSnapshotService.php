@@ -102,6 +102,7 @@ final class ProjectSnapshotService
                 $this->optionalText($projectRoot.DIRECTORY_SEPARATOR.'.node-version'),
                 $this->enginesNode($packageJson),
             ),
+            hasNpmLockfile: is_file($packageLockPath),
         );
     }
 
