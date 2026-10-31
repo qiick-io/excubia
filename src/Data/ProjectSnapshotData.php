@@ -22,5 +22,6 @@ final readonly class ProjectSnapshotData
         public array $composerPackages,
         public array $npmPackages,
         public ?string $nodeVersionDeclaration,
+        public bool $hasNpmLockfile = false,
     ) {}
 }
