@@ -144,6 +144,20 @@ final class PackagistApiService
     }
 
     /**
+     * Same as `versions`, except a data-source outage returns null.
+     *
+     * @return list<PackagistVersionData>|null
+     */
+    public function versionsIfAvailable(string $packageName): ?array
+    {
+        try {
+            return $this->versions($packageName);
+        } catch (DataSourceUnavailableException) {
+            return null;
+        }
+    }
+
+    /**
      * @param  list<string>  $packageNames
      * @return list<string>
      */
