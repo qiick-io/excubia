@@ -1,5 +1,7 @@
 # qiick Excubia — Architecture v0.1.0
 
+Composer package: `qiick/excubia-core`. Install with `composer require --dev qiick/excubia-core`. The CLI binary stays `bin/excubia`.
+
 > Companion to `docs/SPEC.md`. Follows "Codice Perfetto" (`knowledge/conventions/code-quality.md`): `declare(strict_types=1)` everywhere, explicit role suffixes, readonly `*Data` value objects, full English docblocks (why + array shapes + side effects + `@throws`), no abbreviations, boolean `is/has/can/should` prefixes, curly braces and blank lines around control flow, strict DRY. There are no Eloquent models in this package, so every class has a role suffix.
 
 ## 1. Layout
