@@ -70,6 +70,21 @@ final class PackagistApiService
     }
 
     /**
+     * Same as `securityAdvisories`, except a data-source outage returns null.
+     *
+     * @param  list<string>  $packageNames
+     * @return list<ComposerAdvisoryData>|null
+     */
+    public function securityAdvisoriesIfAvailable(array $packageNames): ?array
+    {
+        try {
+            return $this->securityAdvisories($packageNames);
+        } catch (DataSourceUnavailableException) {
+            return null;
+        }
+    }
+
+    /**
      * @return list<PackagistVersionData>
      */
     public function versions(string $packageName): array
@@ -126,6 +141,20 @@ final class PackagistApiService
         }
 
         return $versions;
+    }
+
+    /**
+     * Same as `versions`, except a data-source outage returns null.
+     *
+     * @return list<PackagistVersionData>|null
+     */
+    public function versionsIfAvailable(string $packageName): ?array
+    {
+        try {
+            return $this->versions($packageName);
+        } catch (DataSourceUnavailableException) {
+            return null;
+        }
     }
 
     /**

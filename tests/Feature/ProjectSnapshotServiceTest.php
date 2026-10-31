@@ -15,7 +15,8 @@ function projectFixture(string $name): string
 it('reads the healthy laravel 13 fixture', function () {
     $snapshot = (new ProjectSnapshotService)->snapshot(projectFixture('healthy-laravel-13'), ExcubiaConfigurationData::defaults());
 
-    expect($snapshot->phpVersion)->toBe('8.4.1.0')
+    expect($snapshot->hasNpmLockfile)->toBeFalse()
+        ->and($snapshot->phpVersion)->toBe('8.4.1.0')
         ->and($snapshot->laravelFrameworkVersion)->toBe('v13.39.0')
         ->and($snapshot->nodeVersionDeclaration)->toBe('22')
         ->and($snapshot->composerPackages)->toHaveCount(2)
@@ -51,7 +52,8 @@ it('reads an npm lockfile without treating the project root as a package', funct
         $byName[$package->name] = $package;
     }
 
-    expect($snapshot->nodeVersionDeclaration)->toBe('>=20')
+    expect($snapshot->hasNpmLockfile)->toBeTrue()
+        ->and($snapshot->nodeVersionDeclaration)->toBe('>=20')
         ->and($snapshot->laravelFrameworkVersion)->toBeNull()
         ->and($byName['lodash']->version)->toBe('4.17.20')
         ->and($byName['lodash']->isDirectDependency)->toBeTrue()

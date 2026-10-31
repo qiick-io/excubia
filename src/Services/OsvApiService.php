@@ -6,6 +6,7 @@ namespace Qiick\Excubia\Services;
 
 use Qiick\Excubia\Contracts\HttpClientContract;
 use Qiick\Excubia\Data\OsvVulnerabilityData;
+use Qiick\Excubia\Exceptions\DataSourceUnavailableException;
 
 /**
  * OSV batch query. One POST carries every npm package name and version.
@@ -81,6 +82,21 @@ final class OsvApiService
         }
 
         return $vulnerabilities;
+    }
+
+    /**
+     * Same as `vulnerabilities`, except a data-source outage returns null.
+     *
+     * @param  list<array{name: string, version: string}>  $packages
+     * @return list<OsvVulnerabilityData>|null
+     */
+    public function vulnerabilitiesIfAvailable(array $packages): ?array
+    {
+        try {
+            return $this->vulnerabilities($packages);
+        } catch (DataSourceUnavailableException) {
+            return null;
+        }
     }
 
     /**
