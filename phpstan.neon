@@ -5,6 +5,10 @@ parameters:
     level: max
     paths:
         - src
+    excludePaths:
+        # Larastan boots Laravel helpers when it sees an Artisan command.
+        # This package is not an application, so the alias is covered by Pest.
+        - src/Laravel
     tmpDir: build/phpstan
     bootstrapFiles:
         - phpstan-bootstrap.php

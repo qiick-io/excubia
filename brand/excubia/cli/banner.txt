@@ -1,0 +1,2 @@
+qiick Excubia
+Health checks for Laravel apps.
