@@ -315,7 +315,11 @@ final class ProjectSnapshotService
         try {
             $decoded = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $exception) {
-            throw new InvalidConfigurationException($path.' is not valid JSON.', previous: $exception);
+            $reason = str_ends_with($path, 'composer.lock')
+                ? $path.' is broken or unparseable.'
+                : $path.' is not valid JSON.';
+
+            throw new InvalidConfigurationException($reason, previous: $exception);
         }
 
         if (! is_array($decoded)) {
