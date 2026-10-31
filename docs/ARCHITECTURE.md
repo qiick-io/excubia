@@ -5,7 +5,7 @@
 ## 1. Layout
 
 ```
-qiick-io/excubia
+qiick-io/excubia-core
 ├── bin/excubia                         # standalone CLI entry (symfony/console), no Laravel boot
 ├── src/
 │   ├── Checks/                         # one class per check, implements HealthCheckContract

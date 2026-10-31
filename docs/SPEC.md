@@ -13,7 +13,7 @@ Why it exists (knowledge base): `composer audit` only checks CVEs; laravelversio
 
 It is roadmap **Step 1, Phase A** of the qiick suite. Phase B (uptime, connectors, runtime probe `qiick/excubia-probe`) is roadmap Step 4 and is **not** part of this spec.
 
-Branding: always **"qiick Excubia"** (package `qiick/excubia`, repo `qiick-io/excubia`). Never "Excubia" alone in headings, never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
+Branding: always **"qiick Excubia"** (package `qiick/excubia`, repo `qiick-io/excubia-core`). Never "Excubia" alone in headings, never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
 
 ### Target users
 1. Laravel developers and freelancers maintaining one or more apps.
@@ -101,7 +101,7 @@ Table output: grouped by severity, coloured (no colour when not a TTY or `NO_COL
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/qiick-io/excubia/main/excubia.schema.json",
+  "$schema": "https://raw.githubusercontent.com/qiick-io/excubia-core/main/excubia.schema.json",
   "failOn": "high",
   "includeDev": true,
   "checks": {
