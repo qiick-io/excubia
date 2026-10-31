@@ -1,0 +1,17 @@
+{
+    "packages": [
+        {
+            "name": "laravel/framework",
+            "version": "v13.39.0"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "phpunit/phpunit",
+            "version": "11.5.0"
+        }
+    ],
+    "platform": {
+        "php": "8.3.0"
+    }
+}
