@@ -25,6 +25,10 @@ arch('contracts are interfaces')
     ->toBeInterfaces()
     ->toHaveSuffix('Contract');
 
+arch('renderers use the renderer suffix')
+    ->expect('Qiick\Excubia\Renderers')
+    ->toHaveSuffix('Renderer');
+
 arch('parsers use the parser suffix')
     ->expect('Qiick\Excubia\Parsers')
     ->toHaveSuffix('Parser');
