@@ -1,4 +1,4 @@
-# qiick Excubia — Roadmap
+# Excubia — Roadmap
 
 After v0.1.0, through v1.0.0. Source of truth: [`docs/SPEC.md`](SPEC.md) and [`docs/ARCHITECTURE.md`](ARCHITECTURE.md), approved on 2026-10-31. Decisions D1–D13 and A1–A2 are final. Anything marked **[PROPOSAL]** in the spec is not approved.
 

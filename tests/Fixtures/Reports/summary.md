@@ -1,4 +1,4 @@
-# qiick Excubia
+# Excubia
 
 1 critical · 1 high · 0 medium · 0 low
 

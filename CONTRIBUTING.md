@@ -1,4 +1,4 @@
-# Contributing to qiick Excubia
+# Contributing to Excubia
 
 Thanks for helping. The Composer package is `qiick/excubia-core`. Install it with `composer require qiick/excubia-core` (not `--dev`). The command stays `vendor/bin/excubia`. A few rules keep the codebase consistent:
 

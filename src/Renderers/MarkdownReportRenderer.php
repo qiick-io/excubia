@@ -17,7 +17,7 @@ final class MarkdownReportRenderer implements ReportRendererContract
     public function render(HealthReportData $healthReport): string
     {
         $lines = [
-            '# qiick Excubia',
+            '# Excubia',
             '',
             $healthReport->summaryLine(),
             '',

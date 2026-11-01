@@ -1,4 +1,4 @@
-# qiick Excubia — Architecture v0.1.0
+# Excubia — Architecture v0.1.0
 
 Composer package: `qiick/excubia-core`. Install with `composer require qiick/excubia-core` (not `--dev`). The CLI binary stays `bin/excubia`. Opt-in runtime monitoring (Phase B) lives in this package; there is no separate `qiick/excubia-probe`. The multi-project dashboard is the separate app `qiick-io/excubia-app`.
 
