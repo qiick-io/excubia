@@ -12,7 +12,7 @@ qiick Excubia is the Laravel Health Check CLI of the [qiick](https://qiick.io) s
 ## Install
 
 ```bash
-composer require --dev qiick/excubia-core
+composer require qiick/excubia-core
 ```
 
 CLI binary: `vendor/bin/excubia`.
