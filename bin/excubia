@@ -1,0 +1,38 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Composer\InstalledVersions;
+use Qiick\Excubia\Console\CheckCommand;
+use Qiick\Excubia\Console\ClearCacheCommand;
+use Symfony\Component\Console\Application;
+
+$autoload = null;
+
+foreach ([__DIR__.'/../vendor/autoload.php', __DIR__.'/../../../autoload.php'] as $candidate) {
+    if (is_file($candidate)) {
+        $autoload = $candidate;
+
+        break;
+    }
+}
+
+if ($autoload === null) {
+    fwrite(STDERR, "Composer autoload was not found. Run composer install.\n");
+
+    exit(2);
+}
+
+require $autoload;
+
+$version = 'dev';
+
+if (class_exists(InstalledVersions::class) && InstalledVersions::isInstalled('qiick/excubia-core')) {
+    $version = InstalledVersions::getPrettyVersion('qiick/excubia-core') ?? 'dev';
+}
+
+$application = new Application('qiick Excubia', $version);
+$application->add(new CheckCommand);
+$application->add(new ClearCacheCommand);
+exit($application->run());

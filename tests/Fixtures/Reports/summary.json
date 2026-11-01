@@ -1,0 +1,52 @@
+{
+    "schemaVersion": 1,
+    "checks": [
+        {
+            "checkId": "php-eol",
+            "name": "PHP end of life",
+            "status": "fail",
+            "findings": [
+                {
+                    "checkId": "php-eol",
+                    "severity": "critical",
+                    "status": "fail",
+                    "subject": "php",
+                    "message": "Security support ended.",
+                    "fixHint": "Upgrade PHP to 8.3 (supported until 2027-12-31).",
+                    "evidenceUrl": null
+                },
+                {
+                    "checkId": "php-eol",
+                    "severity": "info",
+                    "status": "pass",
+                    "subject": "php",
+                    "message": "Supported.",
+                    "fixHint": "",
+                    "evidenceUrl": null
+                }
+            ]
+        },
+        {
+            "checkId": "composer-advisories",
+            "name": "Known vulnerabilities (Composer)",
+            "status": "warn",
+            "findings": [
+                {
+                    "checkId": "composer-advisories",
+                    "severity": "high",
+                    "status": "warn",
+                    "subject": "vendor/package",
+                    "message": "Known vulnerability.",
+                    "fixHint": "Update vendor/package.",
+                    "evidenceUrl": "https://example.test/advisory"
+                }
+            ]
+        }
+    ],
+    "upgradePlan": [
+        {
+            "stepNumber": 1,
+            "message": "Upgrade PHP first."
+        }
+    ]
+}

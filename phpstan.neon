@@ -1,0 +1,18 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: max
+    paths:
+        - src
+    excludePaths:
+        # Larastan boots Laravel helpers when it sees an Artisan command.
+        # This package is not an application, so the alias is covered by Pest.
+        - src/Laravel
+    tmpDir: build/phpstan
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    # Larastan calls config_path() when this list is empty. This package has
+    # no config directory; env() is already forbidden by the architecture test.
+    configDirectories:
+        - build/phpstan-config
