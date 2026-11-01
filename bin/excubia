@@ -32,7 +32,7 @@ if (class_exists(InstalledVersions::class) && InstalledVersions::isInstalled('qi
     $version = InstalledVersions::getPrettyVersion('qiick/excubia-core') ?? 'dev';
 }
 
-$application = new Application('qiick Excubia', $version);
+$application = new Application('Excubia', $version);
 $application->add(new CheckCommand);
 $application->add(new ClearCacheCommand);
 exit($application->run());

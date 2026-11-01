@@ -1,4 +1,4 @@
-# qiick Excubia — Specification v0.1.0
+# Excubia — Specification v0.1.0
 
 > Status: **APPROVED by Luca on 2026-10-31** (all recommendations in section 10 accepted). This file and `docs/ARCHITECTURE.md` are the single source of truth for v0.1.0. Anything not written here is out of scope; new ideas become `needs-decision` proposal issues, not code.
 >
@@ -7,13 +7,13 @@
 
 ## 1. Product
 
-**qiick Excubia** is an open-source (MIT) health check for Laravel projects. It reads a project's lockfiles and manifests and reports, in one place: PHP / Laravel / Node end of life, known vulnerabilities, abandoned and stale packages, blockers for the next Laravel major, and a suggested upgrade order.
+**Excubia** is an open-source (MIT) health check for Laravel projects. It reads a project's lockfiles and manifests and reports, in one place: PHP / Laravel / Node end of life, known vulnerabilities, abandoned and stale packages, blockers for the next Laravel major, and a suggested upgrade order.
 
 Why it exists (knowledge base): `composer audit` only checks CVEs; laravelversions.com only shows EOL; Laravel Shift is paid per upgrade; laravel/vet reviews package code (complementary); LaraPlugins scores single packages, not your project; Enlightn is archived. Nothing combines EOL, CVEs, abandoned packages, upgrade order and a summary in one report.
 
-It is roadmap **Step 1, Phase A** of the qiick suite. Phase B (uptime, connectors, runtime probe `qiick/excubia-probe`) is roadmap Step 4 and is **not** part of this spec.
+It is roadmap **Step 1, Phase A** of the qiick suite. Projects install only `qiick/excubia-core` with a normal `composer require` (not `--dev`): the package stays lightweight, with minimal dependencies and zero runtime cost while monitoring is disabled. It ships the CLI plus **opt-in** live/runtime monitoring enabled via config. There is no separate `qiick/excubia-probe` package. Phase B (uptime, connectors, and that opt-in monitoring, connected to the self-hosted multi-project dashboard `qiick-io/excubia-app` or later qiick Cloud) is roadmap Step 4 and is **not** part of this spec.
 
-Branding: always **"qiick Excubia"** (package `qiick/excubia-core`, repo `qiick-io/excubia-core`). Never "Excubia" alone in headings, never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
+Branding: display name is **"Excubia"** alone (package `qiick/excubia-core`, repo `qiick-io/excubia-core`). Do not prefix the product name with "qiick" in headings, CLI banner, user-facing strings, or docs. Part of the qiick suite; suite affiliation stays in prose and package/repo ids. Never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
 
 ### Target users
 1. Laravel developers and freelancers maintaining one or more apps.
@@ -33,7 +33,7 @@ In scope:
 - Release to Packagist as `qiick/excubia-core` v0.1.0.
 
 ### Explicit NON-goals for v0.1.0
-- No uptime monitoring, multi-region probes, connectors or runtime probe (Phase B, Step 4).
+- No uptime monitoring, multi-region probes, connectors, or opt-in runtime monitoring (Phase B, Step 4; ships later inside `qiick/excubia-core`, not a separate probe package; dashboard is `qiick-io/excubia-app`).
 - No paid features, no qiick Cloud, no accounts, no login, no telemetry.
 - No web scanner in v0.1.0 (it is milestone v0.2.0, section 9; Decision D2).
 - No code changes to the scanned project (read-only; no auto-fix, no `composer update`).

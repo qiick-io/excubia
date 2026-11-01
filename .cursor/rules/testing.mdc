@@ -1,5 +1,5 @@
 ---
-description: Pest, Pint, and PHPStan for the qiick Excubia package.
+description: Pest, Pint, and PHPStan for the Excubia package.
 globs: "**/*Test.php"
 alwaysApply: false
 ---

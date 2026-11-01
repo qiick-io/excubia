@@ -1,6 +1,6 @@
-# Contributing to qiick Excubia
+# Contributing to Excubia
 
-Thanks for helping. The Composer package is `qiick/excubia-core`. Install it with `composer require --dev qiick/excubia-core`. The command stays `vendor/bin/excubia`. A few rules keep the codebase consistent:
+Thanks for helping. The Composer package is `qiick/excubia-core`. Install it with `composer require qiick/excubia-core` (not `--dev`). The command stays `vendor/bin/excubia`. A few rules keep the codebase consistent:
 
 1. Open or pick an issue first. One issue per pull request.
 2. Branch from `develop` as `<type>/<issue>-<kebab-slug>` (types: feat, fix, refactor, chore, docs, test, perf, ci, build, security).

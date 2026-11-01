@@ -1,4 +1,4 @@
-# qiick Excubia — Roadmap
+# Excubia — Roadmap
 
 After v0.1.0, through v1.0.0. Source of truth: [`docs/SPEC.md`](SPEC.md) and [`docs/ARCHITECTURE.md`](ARCHITECTURE.md), approved on 2026-10-31. Decisions D1–D13 and A1–A2 are final. Anything marked **[PROPOSAL]** in the spec is not approved.
 
@@ -47,7 +47,7 @@ The spec names the following and assigns no version. Each issue says so and is a
 | #17 | Later: pull request comments | Section 2 non-goals. "Later, Pro/CI mode". |
 | #18 | Later: scheduled multi-repo monitoring | Section 2 non-goals. "Later, Pro/CI mode". Not Phase B. |
 | #19 | Later: badges | Section 2 non-goals. "Later, Pro/CI mode". |
-| #20 | Phase B: uptime, connectors, and runtime probe | Section 1 and section 2. Roadmap Step 4. Not part of this spec. Includes multi-region probes and `qiick/excubia-probe`. Domain verification belongs here, not in v0.2.0. |
+| #20 | Phase B: uptime, connectors, and opt-in runtime monitoring | Section 1 and section 2. Roadmap Step 4. Not part of this spec. Opt-in monitoring ships inside `qiick/excubia-core` (config-enabled; no separate `qiick/excubia-probe`). Multi-project dashboard is `qiick-io/excubia-app` (also #18 / qiick Cloud later). Domain verification belongs here, not in v0.2.0. |
 | #21 | yarn.lock and pnpm-lock.yaml support | Section 6. Non-goals for v0.1.0 only. No later version is assigned. |
 
 ## Dependencies on v0.1.0

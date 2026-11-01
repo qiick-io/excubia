@@ -35,7 +35,7 @@ it('fails a critical php end-of-life finding and can hide the banner', function 
     expect($exitCode)->toBe(1)
         ->and($tester->getDisplay())->toContain('Security support ended')
         ->and($tester->getDisplay())->toContain('Upgrade PHP to 8.4')
-        ->and($tester->getDisplay())->not->toContain('qiick Excubia');
+        ->and($tester->getDisplay())->not->toContain('Excubia');
 });
 
 it('returns zero when fail-on is none and writes json to a file', function () {
@@ -124,11 +124,11 @@ it('names the artisan alias and prints the banner and version', function () {
         '--fail-on' => 'none',
     ]);
 
-    expect($tester->getDisplay())->toContain('qiick Excubia');
+    expect($tester->getDisplay())->toContain('Excubia');
 
     $binary = dirname(__DIR__, 2).'/bin/excubia';
     exec('php '.escapeshellarg($binary).' --version 2>&1', $output, $exitCode);
 
     expect($exitCode)->toBe(0)
-        ->and(implode("\n", $output))->toContain('qiick Excubia');
+        ->and(implode("\n", $output))->toContain('Excubia');
 });

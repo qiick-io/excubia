@@ -1,5 +1,5 @@
 name: Report a bug
-description: Create a report to help us improve qiick Excubia
+description: Create a report to help us improve Excubia
 labels: ["bug"]
 body:
   - type: markdown
@@ -8,7 +8,7 @@ body:
         Thanks for taking the time to report a bug.
 
         Before filing, please check:
-        - You're on a recent version of qiick Excubia (`qiick/excubia-core`)
+        - You're on a recent version of Excubia (`qiick/excubia-core`)
         - There's [no existing issue](https://github.com/qiick-io/excubia-core/issues?q=is%3Aissue) that already describes the problem
 
   - type: textarea
@@ -56,7 +56,7 @@ body:
         PHP version:
         Laravel version (if any):
         OS:
-        How installed (composer require --dev / path repo):
+        How installed (composer require / path repo):
     validations:
       required: true
 
