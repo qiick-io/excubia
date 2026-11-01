@@ -1,4 +1,4 @@
-# qiick Excubia — Architecture v0.1.0
+# Excubia — Architecture v0.1.0
 
 Composer package: `qiick/excubia-core`. Install with `composer require --dev qiick/excubia-core`. The CLI binary stays `bin/excubia`.
 

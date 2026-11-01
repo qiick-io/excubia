@@ -1,11 +1,11 @@
 ---
-description: Do not ship qiick Excubia to main, tag it, or publish it unless the user explicitly asks.
+description: Do not ship Excubia to main, tag it, or publish it unless the user explicitly asks.
 alwaysApply: true
 ---
 
 # No automatic release
 
-Agents must not ship qiick Excubia (`qiick/excubia-core`) to `main` without an explicit user request. `develop` is the integration branch. `main` is for releases.
+Agents must not ship Excubia (`qiick/excubia-core`) to `main` without an explicit user request. `develop` is the integration branch. `main` is for releases.
 
 ## Allowed
 

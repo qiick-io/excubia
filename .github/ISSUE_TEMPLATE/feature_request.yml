@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an idea for qiick Excubia
+description: Suggest an idea for Excubia
 labels: ["enhancement"]
 body:
   - type: markdown

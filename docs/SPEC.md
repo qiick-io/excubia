@@ -1,4 +1,4 @@
-# qiick Excubia — Specification v0.1.0
+# Excubia — Specification v0.1.0
 
 > Status: **APPROVED by Luca on 2026-10-31** (all recommendations in section 10 accepted). This file and `docs/ARCHITECTURE.md` are the single source of truth for v0.1.0. Anything not written here is out of scope; new ideas become `needs-decision` proposal issues, not code.
 >
@@ -7,13 +7,13 @@
 
 ## 1. Product
 
-**qiick Excubia** is an open-source (MIT) health check for Laravel projects. It reads a project's lockfiles and manifests and reports, in one place: PHP / Laravel / Node end of life, known vulnerabilities, abandoned and stale packages, blockers for the next Laravel major, and a suggested upgrade order.
+**Excubia** is an open-source (MIT) health check for Laravel projects. It reads a project's lockfiles and manifests and reports, in one place: PHP / Laravel / Node end of life, known vulnerabilities, abandoned and stale packages, blockers for the next Laravel major, and a suggested upgrade order.
 
 Why it exists (knowledge base): `composer audit` only checks CVEs; laravelversions.com only shows EOL; Laravel Shift is paid per upgrade; laravel/vet reviews package code (complementary); LaraPlugins scores single packages, not your project; Enlightn is archived. Nothing combines EOL, CVEs, abandoned packages, upgrade order and a summary in one report.
 
 It is roadmap **Step 1, Phase A** of the qiick suite. Phase B (uptime, connectors, runtime probe `qiick/excubia-probe`) is roadmap Step 4 and is **not** part of this spec.
 
-Branding: always **"qiick Excubia"** (package `qiick/excubia-core`, repo `qiick-io/excubia-core`). Never "Excubia" alone in headings, never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
+Branding: display name is **"Excubia"** alone (package `qiick/excubia-core`, repo `qiick-io/excubia-core`). Do not prefix the product name with "qiick" in headings, CLI banner, user-facing strings, or docs. Part of the qiick suite; suite affiliation stays in prose and package/repo ids. Never the q tile next to the qiick wordmark, Vigil Blue accent, tagline placeholder "Health checks for Laravel apps." (TBD).
 
 ### Target users
 1. Laravel developers and freelancers maintaining one or more apps.

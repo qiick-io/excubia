@@ -1,9 +1,9 @@
 ---
-description: Codice Perfetto for the qiick Excubia PHP package. The spec wins if this rule disagrees.
+description: Codice Perfetto for the Excubia PHP package. The spec wins if this rule disagrees.
 alwaysApply: true
 ---
 
-# Codice Perfetto for qiick Excubia
+# Codice Perfetto for Excubia
 
 `docs/SPEC.md` and `docs/ARCHITECTURE.md` are the source of truth. This rule does not add product scope.
 
