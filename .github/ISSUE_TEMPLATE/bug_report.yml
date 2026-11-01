@@ -56,7 +56,7 @@ body:
         PHP version:
         Laravel version (if any):
         OS:
-        How installed (composer require --dev / path repo):
+        How installed (composer require / path repo):
     validations:
       required: true
 

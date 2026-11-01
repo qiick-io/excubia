@@ -50,7 +50,7 @@ Pest / CI jobs run on PHP 8.3+. Scanned projects may be any Composer app; Larave
 ## Install
 
 ```bash
-composer require --dev qiick/excubia-core
+composer require qiick/excubia-core
 ```
 
 Binary: `vendor/bin/excubia`.
