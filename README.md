@@ -1,4 +1,10 @@
-<!-- README headers (Externa-style 1280×320 product wordmark + tagline, Vigil Blue, no qiick wordmark in hero) TBD — commission matching externa-core assets. -->
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/header-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset=".github/assets/header-light.svg">
+    <img alt="Excubia: Health checks for Laravel apps, from the command line" src=".github/assets/header-light.svg" width="100%">
+  </picture>
+</p>
 
 # Excubia
 
