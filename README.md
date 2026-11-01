@@ -12,7 +12,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/qiick-io/excubia-core/ci.yml?branch=main&label=CI)](https://github.com/qiick-io/excubia-core/actions/workflows/ci.yml)
 [![PHP](https://img.shields.io/badge/PHP-%5E8.2-777BB4?logo=php&logoColor=white)](./composer.json)
 
-**Version:** `0.1.0` (tagged). Docs release `0.1.1` prepares this README; tag after merge. See [CHANGELOG.md](./CHANGELOG.md).
+**Releases:** see [GitHub Releases](https://github.com/qiick-io/excubia-core/releases) and [CHANGELOG.md](./CHANGELOG.md).
 
 **Excubia** is the open-source (MIT) Laravel health-check CLI of the [qiick](https://qiick.io) suite. Package [`qiick/excubia-core`](https://github.com/qiick-io/excubia-core) reads lockfiles and manifests and reports, in one place: PHP / Laravel / Node end of life, known vulnerabilities, abandoned and stale packages, blockers for the next Laravel major, and a suggested upgrade order.
 
@@ -21,7 +21,7 @@
 | | |
 | --- | --- |
 | **Spec** | [`docs/SPEC.md`](./docs/SPEC.md) · [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) |
-| **Install** | `composer require --dev qiick/excubia-core` |
+| **Install** | `composer require qiick/excubia-core` |
 | **Security** | [`SECURITY.md`](./SECURITY.md) |
 | **Issues** | [GitHub Issues](https://github.com/qiick-io/excubia-core/issues) |
 | **Release** | [GitHub Releases](https://github.com/qiick-io/excubia-core/releases) |
@@ -29,13 +29,13 @@
 
 ### Features
 
-- **Nine health checks** — EOL, advisories, abandoned/stale packages, next-major blockers, upgrade plan
+- **Eight health checks plus an upgrade plan** — EOL, advisories, abandoned/stale packages, next-major blockers, ordered upgrade plan
 - **Standalone CLI** — `vendor/bin/excubia` (no app boot) plus Artisan alias `php artisan excubia:check`
 - **Formats** — `table` (default), `json`, `markdown`
 - **CI-friendly** — `--fail-on`, exit codes, optional `--offline` cache
 - **Config** — project-root `excubia.json` with JSON Schema
 
-**Non-goals (v0.1.x):** no web scanner yet (planned v0.2.0), no uptime/probes (Phase B), no auto-fix of the scanned project, no source-code analysis, no telemetry.
+**Non-goals (v0.1.x):** no web scanner yet (planned v0.2.0), no uptime or runtime monitoring yet (Phase B, planned as opt-in inside excubia-core), no auto-fix of the scanned project, no source-code analysis, no telemetry.
 
 ## Requirements
 
@@ -84,7 +84,7 @@ Key options: `--format=table|json|markdown`, `--output=FILE`, `--fail-on=critica
 | `0` | No finding at or above `--fail-on` |
 | `1` | At least one finding at or above `--fail-on` |
 | `2` | Usage or configuration error (missing/broken `composer.lock`, invalid config, unknown check id) |
-| `3` | Data-source failure for a non-skippable check (only with `--strict`; otherwise those checks are skipped) |
+| `3` | Reserved for data-source failure; not returned in 0.1.x — an unavailable data source marks the affected check `skipped`. |
 
 ## Health checks
 
@@ -98,7 +98,8 @@ Key options: `--format=table|json|markdown`, `--output=FILE`, `--fail-on=critica
 | `composer-abandoned` | Abandoned packages |
 | `composer-stale` | Stale packages |
 | `laravel-next-blocker` | Next-major blockers |
-| `upgrade-plan` | Upgrade order (info; never changes the exit code) |
+
+Every report ends with an ordered upgrade plan (`upgrade-plan` section, info only, never affects the exit code, cannot be selected with `--only`/`--skip`).
 
 Full severity rules and data sources: [`docs/SPEC.md`](./docs/SPEC.md) §3.
 
